@@ -14,7 +14,7 @@ pipeline {
                 sh '''
                 docker stop student-app || true
                 docker rm student-app || true
-                docker run -d -p 3000:3000 \
+                docker run -d -p 5000:5000 \
                 -e MONGODB_URI="mongodb://host.docker.internal:27017/student_db" \
                 --name student-app student-app
                 '''
