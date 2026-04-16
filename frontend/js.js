@@ -1,4 +1,4 @@
-const API = "http://18.136.106.93:5000";
+const API = "/api";
 
 function getUserId() {
     return localStorage.getItem("userId");
