@@ -23,9 +23,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                dir('backend') {
-                    sh 'docker build -t student-app .'
-                }
+                sh 'docker build -t student-app .'
             }
         }
 
