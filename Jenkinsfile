@@ -15,13 +15,17 @@ pipeline {
 
         stage('Install Node Modules') {
             steps {
-                sh 'npm install'
+                dir('backend') {
+                    sh 'npm install'
+                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t student-app .'
+                dir('backend') {
+                    sh 'docker build -t student-app .'
+                }
             }
         }
 
