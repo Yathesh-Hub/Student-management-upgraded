@@ -189,7 +189,7 @@ async function requireAuth() {
             localStorage.setItem('userName', data.user.name);
             localStorage.setItem('userEmail', data.user.email);
             if (userNameEl) {
-                userNameEl.textContent = `Hi there ${data.user.name} 👋🏻`;
+                userNameEl.textContent = `Hi ${data.user.name} 👋🏻`;
             }
         }
     } catch (e) {
