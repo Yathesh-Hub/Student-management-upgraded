@@ -27,7 +27,11 @@ pipeline {
                 bat '''
                 docker run -d --name mongodb -p 27017:27017 mongo:7
                 '''
-                bat 'timeout /t 10'
+
+                bat '''
+                echo Waiting for MongoDB...
+                ping 127.0.0.1 -n 10 > nul
+                '''
             }
         }
 
@@ -51,13 +55,17 @@ pipeline {
                 docker run -d ^
                 --name student-app ^
                 -p 5000:5000 ^
-                -e MONGODB_URI=%MONGODB_URI% ^
-                -e JWT_SECRET=%JWT_SECRET% ^
-                -e NODE_ENV=%NODE_ENV% ^
-                -e PORT=%PORT% ^
+                -e MONGODB_URI=mongodb://host.docker.internal:27017/student_management ^
+                -e JWT_SECRET=jenkins-local-secret-key-12345 ^
+                -e NODE_ENV=development ^
+                -e PORT=5000 ^
                 student-management:latest
                 '''
-                bat 'timeout /t 8'
+        
+                bat '''
+                echo Waiting for app...
+                ping 127.0.0.1 -n 8 > nul
+                '''
             }
         }
 

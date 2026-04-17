@@ -15,24 +15,24 @@ function showMessage(id, text, type = "error") {
 }
 
 function togglePassword(id, icon) {
-    const input = document.getElementById(id);
+  const input = document.getElementById(id);
 
-    if (!input) {
-        console.error('Input not found:', id);
-        return;
-    }
+  if (!input) {
+    console.error('Input not found:', id);
+    return;
+  }
 
-    if (input.type === "password") {
-        input.type = "text";
-        icon.src = "Eye img/view.png";
-        icon.alt = "Hide Password";
-        console.log('Password shown for:', id);
-    } else {
-        input.type = "password";
-        icon.src = "Eye img/hide.png";
-        icon.alt = "Show Password";
-        console.log('Password hidden for:', id);
-    }
+  if (input.type === "password") {
+    input.type = "text";
+    icon.src = "Eye img/view.png";
+    icon.alt = "Hide Password";
+    console.log('Password shown for:', id);
+  } else {
+    input.type = "password";
+    icon.src = "Eye img/hide.png";
+    icon.alt = "Show Password";
+    console.log('Password hidden for:', id);
+  }
 }
 // ── SIGNUP ───────────────────────────────────────────────────────────────────
 

@@ -1,5 +1,13 @@
 // Authentication Functions
 
+function goSlow(url) {
+    document.body.style.transition = 'opacity 0.8s ease';
+    document.body.style.opacity = '0';
+    setTimeout(() => {
+        window.location.href = url;
+    }, 800);
+}
+
 // Show alert message
 function showAlert(message, type = 'error') {
     const alertEl = document.getElementById('alertMessage');
@@ -93,9 +101,7 @@ async function signup() {
 
         if (data.success) {
             showAlert('Account created successfully! Redirecting...', 'success');
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 1500);
+            setTimeout(() => goSlow('login.html'), 700);
         } else {
             showAlert(data.message || 'Signup failed');
         }
@@ -133,9 +139,7 @@ async function login() {
             localStorage.setItem('userId', data.user.id);
 
             showAlert('Login successful! Redirecting...', 'success');
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1000);
+            setTimeout(() => goSlow('dashboard.html'), 200);
         } else {
             showAlert(data.message || 'Login failed');
         }
@@ -151,23 +155,39 @@ function logout() {
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userId');
-    window.location.href = 'login.html';
+    goSlow('login.html');
 }
 
 // Check if user is authenticated
-function requireAuth() {
+async function requireAuth() {
     const token = localStorage.getItem('token');
     
     if (!token) {
-        window.location.href = 'login.html';
+        goSlow('login.html');
         return false;
     }
 
-    // Display user name in navbar
+    // Display cached user name instantly
     const userName = localStorage.getItem('userName');
     const userNameEl = document.getElementById('userName');
     if (userNameEl && userName) {
-        userNameEl.textContent = `Hi, ${userName} 👋`;
+        userNameEl.textContent = `Hi there ${userName} 👋🏻`;
+    }
+
+    // Fetch latest user data in background to prevent showing older names
+    try {
+        const data = await apiCall(API.ME);
+        if (data.success) {
+            localStorage.setItem('userName', data.user.name);
+            localStorage.setItem('userEmail', data.user.email);
+            if (userNameEl) {
+                userNameEl.textContent = `Hi there ${data.user.name} 👋🏻`;
+            }
+        }
+    } catch (e) {
+        console.error('Session invalid, logging out', e);
+        logout();
+        return false;
     }
 
     return true;
@@ -177,6 +197,6 @@ function requireAuth() {
 function redirectIfAuthenticated() {
     const token = localStorage.getItem('token');
     if (token) {
-        window.location.href = 'dashboard.html';
+        goSlow('dashboard.html');
     }
 }
