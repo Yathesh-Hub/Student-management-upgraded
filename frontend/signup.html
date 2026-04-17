@@ -1,137 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Student Portal - Sign Up</title>
-  <link rel="icon" type="image/png" href="img/logo.png">
-  <style>
-    body {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #f3f3f3;
-      font-family: Arial, sans-serif;
-      opacity: 1;
-      transition: opacity 0.8s ease-in-out;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Student Management System</title>
 
-    body.fade-out {
-      opacity: 0;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/auth.css">
+    <link rel="icon" type="image/png" href="img/logo.png">
 
-    .login-box {
-      display: grid;
-      width: 300px;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      gap: 10px;
-    }
+    <style>
+        .password-box{
+            position: relative;
+            width: 100%;
+        }
 
-    label {
-      font-weight: bold;
-    }
+        .password-box input{
+            width: 100%;
+            padding-right: 45px;
+            box-sizing: border-box;
+        }
 
-    input {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+        .eye-icon{
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            object-fit: contain;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
 
-    .password-box {
-      position: relative;
-      width: 100%;
-    }
-
-    .password-box input {
-      width: 100%;
-      padding: 10px 40px 10px 10px;
-      box-sizing: border-box;
-    }
-
-    .eye-icon {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      opacity: 0.7;
-    }
-
-    .eye-icon:hover {
-      opacity: 1;
-    }
-
-    button {
-      margin-top: 10px;
-      padding: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    a {
-      text-align: center;
-      font-size: 12px;
-      cursor: pointer;
-      color: blueviolet;
-      text-decoration: underline;
-    }
-
-    .alert {
-      display: none;
-      padding: 10px;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    .alert.success {
-      background: #e6ffe6;
-      color: #2e7d32;
-    }
-
-    .alert.error {
-      background: #ffe6e6;
-      color: #c62828;
-    }
-  </style>
+        .eye-icon:hover{
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="login-box">
-    <div id="signupMsg" class="alert"></div>
+    <div class="auth-container">
+        <div class="auth-box">
 
-    <label>Name</label>
-    <input id="name" type="text">
+            <div class="auth-header">
+                <img src="img/logo.png" alt="Logo" class="auth-logo">
+                <h1>Student Management System</h1>
+                <p>Create your account</p>
+            </div>
 
-    <label>Email</label>
-    <input id="email" type="text">
+            <div id="alertMessage" class="alert" style="display:none;"></div>
 
-    <label>Password</label>
-    <div class="password-box">
-      <input id="Password" type="password">
-      <img src="Eye img/hide.png" class="eye-icon" onclick="togglePassword('Password', this)" alt="Show password">
+            <form id="signupForm" class="auth-form">
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                <label>Password</label>
+
+                <div class="password-box">
+                    <input id="password" type="password" placeholder="Enter Password">
+
+                    <img src="Eye img/hide.png"
+                        class="eye-icon"
+                        onclick="togglePasswordOld('password', this)"
+                        alt="Show Password">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Confirm Password</label>
+
+                <div class="password-box">
+                    <input id="confirmPassword" type="password" placeholder="Confirm Password">
+
+                    <img src="Eye img/hide.png"
+                        class="eye-icon"
+                        onclick="togglePasswordOld('confirmPassword', this)"
+                        alt="Show Password">
+                </div>
+            </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    Sign Up
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Sign in</a></p>
+            </div>
+
+        </div>
     </div>
 
-    <label>Confirm Password</label>
-    <div class="password-box">
-      <input id="confirmPassword" type="password">
-      <img src="Eye img/hide.png" class="eye-icon" onclick="togglePassword('confirmPassword', this)" alt="Show password">
-    </div>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/auth.js"></script>
 
-    <button onclick="signup()">Sign Up</button>
-    <a onclick="goSlow('login.html')">Already have an account?</a>
-  </div>
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await signup();
+        });
+    </script>
 
-  <script src="script.js"></script>
 </body>
 </html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Student Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="icon" type="image/png" href="img/logo.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img src="img/logo.png" alt="Logo" class="nav-logo">
+                <span class="nav-title">Student Management System</span>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <a href="students.html" class="nav-link">Students</a>
+                <a href="add-student.html" class="nav-link">Add Student</a>
+            </div>
+            <div class="nav-user">
+                <span id="userName" class="user-name"></span>
+                <button onclick="logout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Dashboard</h1>
+                <p>Overview of student information system</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card card-blue">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-content">
+                        <h3 id="totalStudents">0</h3>
+                        <p>Total Students</p>
+                    </div>
+                </div>
+                <div class="stat-card card-green">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <h3 id="activeStudents">0</h3>
+                        <p>Active Students</p>
+                    </div>
+                </div>
+                <div class="stat-card card-purple">
+                    <div class="stat-icon">🎓</div>
+                    <div class="stat-content">
+                        <h3 id="departmentCount">0</h3>
+                        <p>Departments</p>
+                    </div>
+                </div>
+                <div class="stat-card card-orange">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <h3 id="recentCount">0</h3>
+                        <p>Added This Month</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts and Recent Students -->
+            <div class="dashboard-grid">
+                <!-- Students by Department -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>Students by Department</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="departmentChart" class="chart-container"></div>
+                    </div>
+                </div>
+
+                <!-- Students by Year -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>Students by Year</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="yearChart" class="chart-container"></div>
+                    </div>
+                </div>
+
+                <!-- Recently Added Students -->
+                <div class="dashboard-card span-2">
+                    <div class="card-header">
+                        <h2>Recently Added Students</h2>
+                        <a href="students.html" class="btn-link">View All</a>
+                    </div>
+                    <div class="card-body">
+                        <div id="recentStudents" class="recent-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="scripts/config.js"></script>
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/dashboard.js"></script>
+    <script>
+        requireAuth();
+        loadDashboard();
+    </script>
+</body>
+</html>

@@ -1,136 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Student Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/auth.css">
     <link rel="icon" type="image/png" href="img/logo.png">
-  <title>Student Portal - Login</title>
-
-  <style>
-    body {
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      opacity: 1;
-      transition: opacity 0.8s ease-in-out;
-    }
-
-    body.fade-out {
-      opacity: 0;
-    }
-
-    .login-box {
-      display: grid;
-      width: 300px;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-      gap: 8px;
-    }
-
-    .alert {
-      display: none;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    .alert.success {
-      background: #e6ffe6;
-      color: #2e7d32;
-    }
-
-    .alert.error {
-      background: #ffe6e6;
-      color: #c62828;
-    }
-
-    input {
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    .password-box {
-      position: relative;
-      width: 100%;
-    }
-
-    .password-box input {
-      width: 100%;
-      padding: 10px 40px 10px 10px;
-      box-sizing: border-box;
-    }
-
-    .eye-icon {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
-      cursor: pointer;
-      opacity: 0.7;
-    }
-
-    .eye-icon:hover {
-      opacity: 1;
-    }
-
-    label {
-      font-weight: bold;
-    }
-
-    button {
-      margin-top: 10px;
-      padding: 10px;
-      background-color: rebeccapurple;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: cadetblue;
-    }
-
-    h3 {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    a {
-      font-size: 12px;
-      text-align: center;
-      margin-top: 10px;
-      cursor: pointer;
-      color: blueviolet;
-      text-decoration: underline;
-    }
-  </style>
 </head>
-
 <body>
-  <div class="login-box">
-    <div id="msg" class="alert"></div>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <img src="img/logo.png" alt="Logo" class="auth-logo">
+                <h1>Student Management System</h1>
+                <p>Sign in to your account</p>
+            </div>
 
-    <label>Email ID</label>
-    <input id="email" type="text" placeholder="Mail ID">
+            <div id="alertMessage" class="alert" style="display: none;"></div>
 
-    <label>Password</label>
-    <div class="password-box">
-      <input id="password" type="password" placeholder="Password">
-      <img src="Eye img/hide.png" class="eye-icon" onclick="togglePassword('password', this)" alt="Show password">
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                        <button type="button" class="toggle-password" onclick="togglePasswordLogin()">
+                            <img id="eyeIconLogin" src="Eye img/hide.png" alt="Toggle password">
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+            </div>
+        </div>
     </div>
 
-    <button onclick="login()">Sign in</button>
-    <a onclick="goSlow('signup.html')">Create Account</a>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await login();
+        });
+    </script>
 </body>
 </html>

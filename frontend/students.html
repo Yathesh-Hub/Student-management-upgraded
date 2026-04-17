@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students - Student Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link rel="icon" type="image/png" href="img/logo.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img src="img/logo.png" alt="Logo" class="nav-logo">
+                <span class="nav-title">Student Management System</span>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <a href="students.html" class="nav-link active">Students</a>
+                <a href="add-student.html" class="nav-link">Add Student</a>
+            </div>
+            <div class="nav-user">
+                <span id="userName" class="user-name"></span>
+                <button onclick="logout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div>
+                    <h1>All Students</h1>
+                    <p>Manage and view student records</p>
+                </div>
+                <div class="header-actions">
+                    <button onclick="exportToCSV()" class="btn btn-secondary">📥 Export CSV</button>
+                    <a href="add-student.html" class="btn btn-primary">➕ Add Student</a>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="filters-section">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by name, ID, email, mobile..." class="search-input">
+                    <button onclick="searchStudents()" class="btn btn-primary">🔍 Search</button>
+                </div>
+                <div class="filter-group">
+                    <select id="filterDepartment" onchange="applyFilters()" class="filter-select">
+                        <option value="">All Departments</option>
+                    </select>
+                    <select id="filterYear" onchange="applyFilters()" class="filter-select">
+                        <option value="">All Years</option>
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                        <option value="3rd Year">3rd Year</option>
+                        <option value="4th Year">4th Year</option>
+                    </select>
+                    <select id="filterStatus" onchange="applyFilters()" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="Graduated">Graduated</option>
+                    </select>
+                    <button onclick="clearFilters()" class="btn btn-secondary">Clear Filters</button>
+                </div>
+            </div>
+
+            <!-- Students Table -->
+            <div class="dashboard-card">
+                <div class="card-body">
+                    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Loading students...</p>
+                    </div>
+                    <div id="studentsTable"></div>
+                    <div id="pagination" class="pagination"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Student Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="profileContent"></div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirm Delete</h2>
+            <p>Are you sure you want to delete this student?</p>
+            <div class="modal-actions">
+                <button onclick="closeDeleteModal()" class="btn btn-secondary">Cancel</button>
+                <button onclick="confirmDelete()" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/config.js"></script>
+    <script src="scripts/auth.js"></script>
+    <script src="scripts/students.js"></script>
+    <script>
+        requireAuth();
+        loadStudents();
+        loadDepartments();
+    </script>
+</body>
+</html>

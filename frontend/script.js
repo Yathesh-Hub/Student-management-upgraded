@@ -15,23 +15,25 @@ function showMessage(id, text, type = "error") {
 }
 
 function togglePassword(id, icon) {
-  const input = document.getElementById(id);
-  if (input.type === "password") {
-    input.type = "text";
-    icon.src = "Eye img/view.png";
-    icon.alt = "Hide password";
-  } else {
-    input.type = "password";
-    icon.src = "Eye img/hide.png";
-    icon.alt = "Show password";
-  }
+    const input = document.getElementById(id);
+
+    if (!input) {
+        console.error('Input not found:', id);
+        return;
+    }
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.src = "Eye img/view.png";
+        icon.alt = "Hide Password";
+        console.log('Password shown for:', id);
+    } else {
+        input.type = "password";
+        icon.src = "Eye img/hide.png";
+        icon.alt = "Show Password";
+        console.log('Password hidden for:', id);
+    }
 }
-
-// ── IMPORTANT FIX (NO LOCALHOST) ─────────────────────────────────────────────
-
-const API = "http://ec2-18-139-161-32.ap-southeast-1.compute.amazonaws.com:5000";
-// OR: const API = "http://54.255.237.141:5000";
-
 // ── SIGNUP ───────────────────────────────────────────────────────────────────
 
 async function signup() {

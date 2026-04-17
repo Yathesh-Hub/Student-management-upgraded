@@ -3,147 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Database Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Student Management System</title>
     <link rel="icon" type="image/png" href="img/logo.png">
+    <script>
+        // Redirect to appropriate page
+        const token = localStorage.getItem('token');
+        if (token) {
+            window.location.href = 'dashboard.html';
+        } else {
+            window.location.href = 'login.html';
+        }
+    </script>
 </head>
 <body>
-    <div class="app-wrapper">
-        <header class="app-header">
-            <div class="header-content">
-                <img src="img/logo.png" class="header-icon" alt="Logo">
-                <div class="header-text">
-                    <h1>Student Database Portal</h1>
-                    <p>Manage and track student records easily</p>
-                </div>
-                <div class="header-actions">
-                    <span id="welcomeUser" class="welcome-text"></span>
-                    <button class="btn-logout" onclick="logout()">Sign Out</button>
-                </div>
-            </div>
-        </header>
-
-        <main class="dashboard-grid">
-            <!-- Add Student -->
-            <section class="card glass-card">
-                <div class="card-header border-emerald">
-                    <i data-lucide="user-plus"></i>
-                    <h2>Add Student</h2>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="id">Student ID</label>
-                        <input type="number" id="id">
-                    </div>
-                    <div class="form-group">
-                        <label for="sname">Student Name</label>
-                        <input type="text" id="sname">
-                    </div>
-                    <div class="form-group">
-                        <label for="dept">Department</label>
-                        <select id="dept">
-                            <option>CSE</option>
-                            <option>IT</option>
-                            <option>AIDS</option>
-                            <option>AIML</option>
-                            <option>BME</option>
-                            <option>MECH</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-emerald" onclick="senddata()">Add Record</button>
-                    <div class="result-box" id="addResult"></div>
-                </div>
-            </section>
-
-            <!-- Search Student -->
-            <section class="card glass-card">
-                <div class="card-header border-blue">
-                    <i data-lucide="search"></i>
-                    <h2>Search Student</h2>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="searchId">Student ID</label>
-                        <input type="number" id="searchId" placeholder="Enter ID to search">
-                    </div>
-                    <button class="btn btn-blue" onclick="searchStudent()">Search Record</button>
-                    <div class="result-box" id="result"></div>
-                </div>
-            </section>
-
-            <!-- Update Student -->
-            <section class="card glass-card">
-                <div class="card-header border-amber">
-                    <i data-lucide="user-cog"></i>
-                    <h2>Update Student</h2>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="upId">Student ID</label>
-                        <input type="number" id="upId">
-                    </div>
-                    <div class="form-group">
-                        <label for="upName">New Name</label>
-                        <input type="text" id="upName">
-                    </div>
-                    <div class="form-group">
-                        <label for="upDept">New Department</label>
-                        <select id="upDept">
-                            <option>CSE</option>
-                            <option>IT</option>
-                            <option>AIDS</option>
-                            <option>AIML</option>
-                            <option>BME</option>
-                            <option>MECH</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-amber" onclick="updateStudent()">Update Record</button>
-                    <div class="result-box" id="up"></div>
-                </div>
-            </section>
-
-            <!-- Delete Student -->
-            <section class="card glass-card">
-                <div class="card-header border-red">
-                    <i data-lucide="user-minus"></i>
-                    <h2>Delete Student</h2>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <label for="delId">Student ID</label>
-                        <input type="number" id="delId" placeholder="ID to delete">
-                    </div>
-                    <button class="btn btn-red" onclick="delStudent()">Delete Record</button>
-                    <div class="result-box" id="del"></div>
-                </div>
-            </section>
-
-            <!-- All Students -->
-            <section class="card glass-card span-2">
-                <div class="card-header border-purple flex-between">
-                    <div class="flex-align">
-                        <i data-lucide="users"></i>
-                        <h2>All Students</h2>
-                    </div>
-                    <button class="btn btn-purple btn-sm" onclick="allStudent()">Refresh List</button>
-                </div>
-                <div class="card-body">
-                    <div class="data-grid" id="all">
-                        <div class="empty-state">
-                            <i data-lucide="database"></i>
-                            <p>Click "Refresh List" to load students.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+    <div style="display: flex; align-items: center; justify-content: center; height: 100vh; font-family: Arial, sans-serif;">
+        <p>Redirecting...</p>
     </div>
-
-    <script>lucide.createIcons();</script>
-    <script src="script.js"></script>
-    <script src="js.js"></script>
-    <script>requireAuth();</script>
 </body>
 </html>
