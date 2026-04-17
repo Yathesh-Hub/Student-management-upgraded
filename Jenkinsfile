@@ -27,7 +27,11 @@ pipeline {
                 bat '''
                 docker run -d --name mongodb -p 27017:27017 mongo:7
                 '''
-                bat 'timeout /t 10'
+
+                bat '''
+                echo Waiting for MongoDB...
+                ping 127.0.0.1 -n 10 > nul
+                '''
             }
         }
 
