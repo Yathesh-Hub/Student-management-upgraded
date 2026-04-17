@@ -179,7 +179,7 @@ async function requireAuth() {
     const userName = localStorage.getItem('userName');
     const userNameEl = document.getElementById('userName');
     if (userNameEl && userName) {
-        userNameEl.textContent = `Hi there ${userName} 👋🏻`;
+        userNameEl.textContent = `Hi ${userName} 👋🏻`;
     }
 
     // Fetch latest user data in background to prevent showing older names
