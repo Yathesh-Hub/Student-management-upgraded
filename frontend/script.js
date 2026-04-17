@@ -29,7 +29,7 @@ function togglePassword(id, icon) {
 
 // ── IMPORTANT FIX (NO LOCALHOST) ─────────────────────────────────────────────
 
-const API = ""; 
+const API = "http://ec2-18-139-161-32.ap-southeast-1.compute.amazonaws.com:5000";
 // OR: const API = "http://54.255.237.141:5000";
 
 // ── SIGNUP ───────────────────────────────────────────────────────────────────
