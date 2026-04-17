@@ -766,3 +766,9 @@ tr:hover {
 .empty-state p {
     font-size: 14px;
 }
+
+/* Page Transitions */
+.fade-out {
+    opacity: 0 !important;
+    transition: opacity 0.8s ease !important;
+}

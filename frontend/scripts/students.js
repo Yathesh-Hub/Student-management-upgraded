@@ -70,8 +70,8 @@ function displayStudentsTable(students) {
     `;
 
     students.forEach(student => {
-        const statusClass = student.academicStatus === 'Active' ? 'status-active' : 
-                           student.academicStatus === 'Graduated' ? 'status-graduated' : 'status-inactive';
+        const statusClass = student.academicStatus === 'Active' ? 'status-active' :
+            student.academicStatus === 'Graduated' ? 'status-graduated' : 'status-inactive';
 
         html += `
             <tr>
@@ -192,11 +192,11 @@ function displayStudentProfile(student) {
     const modal = document.getElementById('profileModal');
     const content = document.getElementById('profileContent');
 
-    const dob = new Date(student.dateOfBirth).toLocaleDateString('en-US', { 
-        year: 'numeric', month: 'long', day: 'numeric' 
+    const dob = new Date(student.dateOfBirth).toLocaleDateString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric'
     });
-    const admissionDate = new Date(student.admissionDate).toLocaleDateString('en-US', { 
-        year: 'numeric', month: 'long', day: 'numeric' 
+    const admissionDate = new Date(student.admissionDate).toLocaleDateString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric'
     });
 
     content.innerHTML = `
@@ -380,10 +380,10 @@ function showAlert(message, type = 'error') {
 }
 
 // Close modal when clicking outside
-window.onclick = function(event) {
+window.onclick = function (event) {
     const profileModal = document.getElementById('profileModal');
     const deleteModal = document.getElementById('deleteModal');
-    
+
     if (event.target === profileModal) {
         closeModal();
     }

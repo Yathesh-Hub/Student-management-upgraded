@@ -1,12 +1,11 @@
 // Authentication Functions
 
 function goSlow(url) {
-    document.body.style.transition = 'opacity 0.8s ease';
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-        window.location.href = url;
-    }, 800);
+    if (!url || url === '#' || window.location.href.endsWith(url)) return;
+    document.body.classList.add("fade-out");
+    setTimeout(() => { window.location.href = url; }, 800);
 }
+
 
 // Show alert message
 function showAlert(message, type = 'error') {
@@ -22,17 +21,26 @@ function showAlert(message, type = 'error') {
     }, 5000);
 }
 
+// Helper for legacy showMessage calls
+function showMessage(id, text, type = "error") {
+    const msg = document.getElementById(id);
+    if (!msg) {
+        showAlert(text, type);
+        return;
+    }
+    msg.innerText = text;
+    msg.className = "alert " + type;
+    msg.style.display = "block";
+    setTimeout(() => { msg.style.display = "none"; }, 3000);
+}
+
 // Toggle password visibility
 function togglePassword(inputId = 'password') {
     const input = document.getElementById(inputId);
-    const icon = document.getElementById(inputId === 'password' ? 'eyeIcon' : 'eyeIcon' + (inputId === 'confirmPassword' ? '2' : '1'));
-    
     if (input.type === 'password') {
         input.type = 'text';
-        if (icon) icon.textContent = '🙈';
     } else {
         input.type = 'password';
-        if (icon) icon.textContent = '👁️';
     }
 }
 
@@ -40,7 +48,7 @@ function togglePassword(inputId = 'password') {
 function togglePasswordLogin() {
     const input = document.getElementById('password');
     const icon = document.getElementById('eyeIconLogin');
-    
+
     if (input.type === 'password') {
         input.type = 'text';
         icon.src = 'Eye img/view.png';
@@ -55,7 +63,7 @@ function togglePasswordLogin() {
 // Toggle password for signup page (works with old structure)
 function togglePasswordOld(inputId, iconElement) {
     const input = document.getElementById(inputId);
-    
+
     if (input.type === 'password') {
         input.type = 'text';
         iconElement.src = 'Eye img/view.png';
@@ -161,7 +169,7 @@ function logout() {
 // Check if user is authenticated
 async function requireAuth() {
     const token = localStorage.getItem('token');
-    
+
     if (!token) {
         goSlow('login.html');
         return false;

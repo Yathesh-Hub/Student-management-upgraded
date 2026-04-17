@@ -205,7 +205,7 @@ async function handleSubmit(e) {
 
             setTimeout(() => {
                 window.location.href = "students.html";
-            }, 1500);
+            }, 1000);
         }
 
     } catch (error) {
