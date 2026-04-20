@@ -1,15 +1,23 @@
 # Main Terraform configuration for EC2 instance deployment
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-}
 
 provider "aws" {
   region = var.aws_region
+}
+
+# Data source to fetch the latest Ubuntu 22.04 AMI
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
 }
 
 # Create VPC if not using default
@@ -90,6 +98,15 @@ resource "aws_security_group" "student_app_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     description = "HTTP access"
+  }
+
+  # Jenkins access
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Jenkins access"
   }
 
   # Application port (5000 from your Jenkinsfile)
@@ -201,44 +218,59 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
 
 # EC2 instance
 resource "aws_instance" "student_app_instance" {
-  ami                    = var.ami_id
+  ami                    = var.ami_id != "" ? var.ami_id : data.aws_ami.ubuntu.id
   instance_type          = var.instance_type
   key_name               = var.key_pair_name
   subnet_id              = var.create_vpc ? aws_subnet.student_app_subnet[0].id : null
   vpc_security_group_ids = [aws_security_group.student_app_sg.id]
   iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
 
-  # User data script to install and configure the application
+  # User data script to install and configure the application and Jenkins
   user_data = <<-EOF
               #!/bin/bash
               # Update system
               apt-get update -y
-              apt-get upgrade -y
+              
+              # Install Java (Required for Jenkins)
+              apt-get install -y openjdk-17-jre
+              
+              # Install Jenkins
+              wget -O /usr/share/keyrings/jenkins-keyring.asc \
+                https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+              echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+                https://pkg.jenkins.io/debian-stable binary/" | tee \
+                /etc/apt/sources.list.d/jenkins.list > /dev/null
+              apt-get update -y
+              apt-get install -y jenkins
+              systemctl start jenkins
+              systemctl enable jenkins
               
               # Install Docker
               apt-get install -y docker.io
               systemctl start docker
               systemctl enable docker
               
+              # Add jenkins user to docker group
+              usermod -aG docker jenkins
+              usermod -aG docker ubuntu
+              
               # Install Docker Compose
               curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               chmod +x /usr/local/bin/docker-compose
               
-              # Install Node.js (for backend)
+              # Install Node.js
               curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
               apt-get install -y nodejs
               
-              # Install MongoDB (if running locally on EC2)
+              # Install MongoDB
               apt-get install -y mongodb
               systemctl start mongodb
               systemctl enable mongodb
               
               # Create application directory
               mkdir -p /opt/student-app
+              chown ubuntu:ubuntu /opt/student-app
               cd /opt/student-app
-              
-              # Clone your repository (update with your repo URL)
-              # git clone https://github.com/your-repo/student-management.git .
               
               # Create environment file
               cat > .env << 'ENVFILE'
@@ -259,6 +291,8 @@ resource "aws_instance" "student_app_instance" {
               Type=simple
               User=root
               WorkingDirectory=/opt/student-app
+              # We use a loop to wait for docker-compose.yml to appear (deployed via Jenkins)
+              ExecStartPre=/bin/bash -c "until [ -f /opt/student-app/docker-compose.yml ]; do sleep 5; done"
               ExecStart=/usr/local/bin/docker-compose up
               Restart=always
               RestartSec=10
@@ -270,8 +304,11 @@ resource "aws_instance" "student_app_instance" {
               systemctl daemon-reload
               systemctl enable student-app.service
               
-              echo "Setup complete! Application will start automatically on boot."
+              echo "Setup complete! Jenkins is available on port 8080."
+              echo "Initial Admin Password: $(cat /var/lib/jenkins/secrets/initialAdminPassword)" > /home/ubuntu/jenkins_admin_password.txt
+              chown ubuntu:ubuntu /home/ubuntu/jenkins_admin_password.txt
               EOF
+
 
   # Root volume configuration
   root_block_device {
@@ -280,11 +317,9 @@ resource "aws_instance" "student_app_instance" {
     encrypted   = true
   }
 
-  tags = {
-    Name        = "student-app-server"
-    Environment = "production"
-    Project     = "Student Management System"
-  }
+  tags = merge(var.tags, {
+    Name = "student-app-server"
+  })
 }
 
 # Elastic IP for static IP address
@@ -301,36 +336,4 @@ resource "aws_eip" "student_app_eip" {
 # Random ID for secret key generation
 resource "random_id" "secret_key" {
   byte_length = 32
-}
-
-# Output values
-output "instance_id" {
-  description = "The ID of the EC2 instance"
-  value       = aws_instance.student_app_instance.id
-}
-
-output "public_ip" {
-  description = "The public IP address of the EC2 instance"
-  value       = aws_instance.student_app_instance.public_ip
-}
-
-output "elastic_ip" {
-  description = "The Elastic IP address (if allocated)"
-  value       = var.allocate_eip ? aws_eip.student_app_eip[0].public_ip : null
-}
-
-output "ssh_command" {
-  description = "SSH command to connect to the instance"
-  value       = "ssh -i ${var.key_pair_name}.pem ec2-user@${aws_instance.student_app_instance.public_ip}"
-}
-
-output "application_url" {
-  description = "URL to access the application"
-  value       = "http://${aws_instance.student_app_instance.public_ip}:5000"
-}
-
-output "mongodb_connection_string" {
-  description = "MongoDB connection string"
-  value       = "mongodb://${aws_instance.student_app_instance.public_ip}:27017/student_management"
-  sensitive   = true
 }

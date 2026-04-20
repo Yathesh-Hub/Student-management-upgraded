@@ -7,7 +7,7 @@ pipeline {
         NODE_ENV = 'development'
         PORT = '5000'
         AWS_REGION = 'us-east-1'
-        TF_VAR_key_pair_name = 'student-app-key'
+        TF_VAR_key_pair_name = 'tf-key'
     }
 
     stages {
@@ -112,12 +112,12 @@ pipeline {
                     
                     // Copy to EC2 instance
                     bat """
-                    scp -i student-app-key.pem deploy.tar.gz ubuntu@${env.INSTANCE_IP}:/opt/student-app/
+                    scp -i tf-key.pem deploy.tar.gz ubuntu@${env.INSTANCE_IP}:/opt/student-app/
                     """
                     
                     // Extract and restart on EC2
                     bat """
-                    ssh -i student-app-key.pem ubuntu@${env.INSTANCE_IP} "
+                    ssh -i tf-key.pem ubuntu@${env.INSTANCE_IP} "
                     cd /opt/student-app &&
                     tar -xzf deploy.tar.gz &&
                     rm deploy.tar.gz &&
@@ -170,7 +170,7 @@ pipeline {
                 echo "🌐 Application URLs:"
                 echo "Local: http://localhost:5000"
                 echo "Remote: http://${env.INSTANCE_IP}:5000"
-                echo "SSH: ssh -i student-app-key.pem ubuntu@${env.INSTANCE_IP}"
+                echo "SSH: ssh -i tf-key.pem ubuntu@${env.INSTANCE_IP}"
             }
         }
 

@@ -1,5 +1,16 @@
 # Output definitions for Terraform deployment
 
+# Flat outputs for Jenkins integration
+output "public_ip" {
+  description = "The public IP address of the EC2 instance"
+  value       = aws_instance.student_app_instance.public_ip
+}
+
+output "instance_id" {
+  description = "The ID of the EC2 instance"
+  value       = aws_instance.student_app_instance.id
+}
+
 output "instance_details" {
   description = "Details of the created EC2 instance"
   value = {
@@ -30,11 +41,13 @@ output "application_endpoints" {
   description = "Application access endpoints"
   value = {
     web_ui        = "http://${aws_instance.student_app_instance.public_ip}"
+    jenkins       = "http://${aws_instance.student_app_instance.public_ip}:8080"
     api           = "http://${aws_instance.student_app_instance.public_ip}:5000"
     api_docs      = "http://${aws_instance.student_app_instance.public_ip}:5000/api-docs"
     mongodb_admin = "http://${aws_instance.student_app_instance.public_ip}:8081" # If using Mongo Express
   }
 }
+
 
 output "ssh_connection" {
   description = "SSH connection details"
