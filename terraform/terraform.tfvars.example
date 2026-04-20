@@ -1,0 +1,23 @@
+# Example terraform.tfvars file
+# Copy this to terraform.tfvars and update with your values
+
+aws_region      = "us-east-1"
+ami_id          = "ami-0c55b159cbfafe1f0" # Ubuntu 22.04 LTS
+instance_type   = "t2.micro"
+key_pair_name   = "your-key-pair-name"    # Replace with your existing key pair name
+root_volume_size = 20
+create_vpc      = false
+allocate_eip     = false
+
+# If creating VPC
+vpc_cidr        = "10.0.0.0/16"
+subnet_cidr      = "10.0.1.0/24"
+availability_zone = "us-east-1a"
+
+# Tags
+tags = {
+  Project     = "Student Management System"
+  Environment = "Production"
+  ManagedBy   = "Terraform"
+  Owner       = "Your Team Name"
+}
